@@ -1,0 +1,44 @@
+.message {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: fit-content;
+    margin: 15px;
+}
+
+.message > p {
+    background-color: #D7D8D9;
+    font-size: medium;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 10px;
+    margin-right: auto;
+
+}
+
+.message > small {
+    color: #D7D8D9;
+    position: absolute;
+    font-size: 9px;
+    bottom: -5px;
+    right: 0;
+}
+
+.another_user {
+    margin-left: auto;
+}
+
+.another_user > .message_photo {
+    order: 1;
+    margin: 15px;
+}
+
+.message_photo {
+    order: 0
+}
+.another_user > p {
+    background-color: blueviolet;
+    color: white;
+
+}
