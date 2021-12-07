@@ -12,6 +12,10 @@ import {selectUser} from "../../../features/loginSlice";
 //Анимация
 import FlipMove from "react-flip-move";
 //Текущее время
+//узло подвезли
+import useSound from 'use-sound';
+import boopSfx from '../../sounds/sentmessage.mp3';
+import boopSfxx from '../../sounds/pop_up.mp3';
 
 
 const useStyles = makeStyles({
@@ -29,7 +33,8 @@ const useStyles = makeStyles({
 });
 
 const Chat = () => {
-
+    const [play] = useSound(boopSfx);
+    const [playTwo] = useSound(boopSfxx);
     const classes = useStyles()
     const [value, setValue] = useState('');
     const user = useSelector(selectUser)
@@ -40,6 +45,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (chatId) {
+            playTwo()
             db.collection("chats")
                 .doc(chatId)
                 .collection("messages")
@@ -96,6 +102,15 @@ const Chat = () => {
         setValue('')
     }
 
+
+    /*********************************/
+    let handleKeyPress = (event) => {
+            return sendMessage(event),
+                play()
+    }
+    /*********************************/
+
+
     return (
 
         <Wrapper>
@@ -129,9 +144,10 @@ const Chat = () => {
                         label="Текст"
                         onChange={handleChange}
                         value={value}/>
-                    <button onClick={sendMessage}>Отправить</button>
+                    <button onClick={handleKeyPress}>Отправить</button>
+                    {/*{() => { func1(); func2();}}*/}
                 </form>
-                <IconButton>
+                <IconButton onClick={handleKeyPress}>
                     <CreateSharpIcon/>
                 </IconButton>
             </ChatInput>
