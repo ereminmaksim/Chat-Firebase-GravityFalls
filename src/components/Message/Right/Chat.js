@@ -93,7 +93,7 @@ const Chat = () => {
             })
 
 
-        // setValue('')
+        setValue('')
     }
 
     return (
