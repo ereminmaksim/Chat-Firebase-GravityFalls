@@ -15,4 +15,4 @@
 - beautiful d`n`d react <a href='https://reactjsexample.com/beautiful-accessible-drag-and-drop-for-lists-with-react-js-2/'>Перейти</a>
 - redux toolkit <a href='https://redux-toolkit.js.org/'>Перейти</a>
 - use-sound <a href='https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/'></a>
-- material <a href=design react 'https://mui.com/getting-started/usage/'>Перейти</a>
+- material design react <a href='https://mui.com/getting-started/usage/'>Перейти</a>
