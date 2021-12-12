@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import styled from "styled-components";
 import {IconButton, makeStyles, TextField} from "@material-ui/core";
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
@@ -9,6 +9,8 @@ import db from "../../../firebase";
 //УСТАНОВИТЬ ВРЕМЯ ОТПРАВКИ ИЗ FIREBASE!!!
 import firebase from "firebase"
 import {selectUser} from "../../../features/loginSlice";
+
+
 //Анимация
 import FlipMove from "react-flip-move";
 //Текущее время
@@ -43,6 +45,12 @@ const Chat = () => {
     const [messages, setMessages] = useState([])
     const [today, setDate] = React.useState(new Date())
 
+    const prevMsgRef = useRef([]);
+    useEffect(() => {
+        prevMsgRef.current = messages;
+    });
+
+
     useEffect(() => {
         if (chatId) {
             playTwo()
@@ -50,18 +58,30 @@ const Chat = () => {
                 .doc(chatId)
                 .collection("messages")
                 .orderBy("timestamp", "desc")
-                .onSnapshot((snapshot) =>
-                    setMessages(
-                        snapshot.docs.map((doc) => ({
-                            id: doc.id,
-                            data: doc.data()
-                        }))
-                    )
+                .onSnapshot((snapshot) => {
+
+                        setMessages(
+                            snapshot.docs.map((doc) => ({
+                                id: doc.id,
+                                data: doc.data()
+                            }))
+                        )
+                    }
                 )
         }
+
     }, [chatId])
 
-//*******************************************//
+
+    //*******************************************//
+    useEffect(() => {
+        if (messages.length > 0 && prevMsgRef.current.length <= messages.length) play()
+        // if (messages.length > 0) play()
+
+    }, [messages])
+    //*******************************************//
+
+
     const locale = 'en';
     useEffect(() => {
         const timer = setInterval(() => {
@@ -75,17 +95,8 @@ const Chat = () => {
     //*******************************************//
 
 
-    //*******************************************//
-    const handleChange = (e) => {
-        setValue(e.target.value)
-    }
-    /*********************************/
-    const handleSubmit = () => {
-    }
-    /*********************************/
     const sendMessage = (e) => {
         e.preventDefault()
-
         db.collection("chats")
             .doc(chatId).collection("messages")
             .add({
@@ -97,18 +108,23 @@ const Chat = () => {
                 email: user.email,
                 displayName: user.displayName
             })
-
-
         setValue('')
     }
 
 
-    /*********************************/
-    let handleKeyPress = (event) => {
-            return sendMessage(event),
-                play()
+    //*******************************************//
+    // let handleKeyPress = (event) => {
+    //         return sendMessage(event),
+    //             play()
+    // }
+    //*******************************************//
+
+
+    //*******************************************//
+    const handleChange = (e) => {
+        setValue(e.target.value)
     }
-    /*********************************/
+    //*******************************************//
 
 
     return (
@@ -137,17 +153,19 @@ const Chat = () => {
 
 
             <ChatInput>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <TextField
                         className={classes.input}
                         id="standard-basic"
                         label="Текст"
                         onChange={handleChange}
                         value={value}/>
-                    <button onClick={handleKeyPress}>Отправить</button>
+                    <button onClick={sendMessage}>Отправить</button>
                     {/*{() => { func1(); func2();}}*/}
                 </form>
-                <IconButton onClick={handleKeyPress}>
+                <IconButton
+                    onClick={sendMessage}
+                >
                     <CreateSharpIcon/>
                 </IconButton>
             </ChatInput>
@@ -169,7 +187,8 @@ const Wrapper = styled.div`
   flex: 0.80;
   height: 100vh;
   background-color: white;
-
+  
+  
 
 `
 const ChatHeader = styled.div`
@@ -180,11 +199,13 @@ const ChatHeader = styled.div`
   border-bottom: 1px solid #040307;
   background-color: #D7D8D9;
   
+  
 
 
   h4 {
     color: grey;
     font-weight: 500;
+    overflow-wrap: break-word;
 
   }
 
@@ -197,7 +218,7 @@ const ChatMessage = styled.div`
   position: relative;
   z-index: 1;
   overflow: scroll;
-  
+
 
   h3 {
     padding: 20px;
@@ -225,7 +246,7 @@ const Background = styled.div`
   //display: block;
   //top: 0;
   //object-fit: cover;
-  
+
 `
 
 
