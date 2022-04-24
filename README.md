@@ -1,5 +1,5 @@
 # Non-constructive Messenger
-не судите строго, 😁😂
+
 
 ## 🔴 <a href="https://messages-cdc5f.web.app/" target="_blank">Демонстрация</a>
 
